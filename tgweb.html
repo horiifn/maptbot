@@ -1,30 +1,22 @@
-from flask import Flask, render_template, request, redirect
-from aiogram import Bot
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Панель управления</title>
+</head>
+<body>
+    <h1>Панель управления ботом</h1>
+    <form method="post">
+        <label>Режим:</label><br>
+        <input type="text" name="mode" value="{{ config.mode }}"><br><br>
 
-API_TOKEN = '7957348740:AAE9-LUIqHDwi9c5T-T5AF1XpX5GZiOursQ'
-bot = Bot(token=API_TOKEN)
+        <label>Правила:</label><br>
+        <textarea name="rules" rows="4">{{ config.rules }}</textarea><br><br>
 
-app = Flask(__name__)
+        <label>Код:</label><br>
+        <input type="text" name="code" value="{{ config.code }}"><br><br>
 
-# Страница администрирования
-@app.route('/admin', methods=['GET', 'POST'])
-def admin_panel():
-    if request.method == 'POST':
-        # Обработка изменений режима, правил и кода
-        new_mode = request.form.get('mode')
-        new_code = request.form.get('code')
-        new_rules = request.form.get('rules')
-        
-        # Логика изменения данных в боте
-        # Например, вы можете обновить глобальные переменные
-        bot_mode = new_mode
-        bot_code = new_code
-        bot_rules = new_rules
-        
-        return redirect('/admin')
-
-    return render_template('admin_panel.html')
-
-# Запуск приложения
-if __name__ == '__main__':
-    app.run(debug=True)
+        <button type="submit">Сохранить</button>
+    </form>
+</body>
+</html>
