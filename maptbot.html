@@ -66,24 +66,12 @@
             animation: fadeIn 1.5s ease-out;
             flex: 1;
             overflow-y: auto;
-            /* Красивая полоса прокрутки */
-            scrollbar-width: thin;
-            scrollbar-color: #ffffff #333333;
+            /* Скрытие полосы прокрутки */
+            -ms-overflow-style: none; /* Для Internet Explorer и Edge */
+            scrollbar-width: none; /* Для Firefox */
         }
         .container::-webkit-scrollbar {
-            width: 10px;
-        }
-        .container::-webkit-scrollbar-track {
-            background: #333333;
-            border-radius: 5px;
-        }
-        .container::-webkit-scrollbar-thumb {
-            background: linear-gradient(45deg, #cccccc, #ffffff);
-            border-radius: 5px;
-            border: 2px solid #333333;
-        }
-        .container::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(45deg, #ffffff, #cccccc);
+            display: none; /* Для WebKit-браузеров (Chrome, Safari) */
         }
         h1 {
             font-size: 2rem;
