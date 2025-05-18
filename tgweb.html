@@ -2,21 +2,93 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Панель управления</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Панель управления ботом</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
-<body>
-    <h1>Панель управления ботом</h1>
-    <form method="post">
-        <label>Режим:</label><br>
-        <input type="text" name="mode" value="{{ config.mode }}"><br><br>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+        <h1 class="text-2xl font-bold text-center mb-6">Управление ботом</h1>
+        <div id="admin-panel" class="space-y-4">
+            <!-- Set Code -->
+            <div>
+                <label for="code" class="block text-sm font-medium text-gray-700">Новый код</label>
+                <input type="text" id="code" class="mt-1 block w-full p-2 border rounded-md" placeholder="Введите код">
+                <button onclick="submitAction('set_code', 'code')" class="mt-2 w-full bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700">Обновить код</button>
+            </div>
+            <!-- Set Mode -->
+            <div>
+                <label for="mode" class="block text-sm font-medium text-gray-700">Новый режим</label>
+                <input type="text" id="mode" class="mt-1 block w-full p-2 border rounded-md" placeholder="Введите режим">
+                <button onclick="submitAction('set_mode', 'mode')" class="mt-2 w-full bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700">Обновить режим</button>
+            </div>
+            <!-- Set Rules -->
+            <div>
+                <label for="rules" class="block text-sm font-medium text-gray-700">Новые правила</label>
+                <textarea id="rules" class="mt-1 block w-full p-2 border rounded-md" placeholder="Введите правила"></textarea>
+                <button onclick="submitAction('set_rules', 'rules')" class="mt-2 w-full bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700">Обновить правила</button>
+            </div>
+            <!-- Set Prizes -->
+            <div>
+                <label for="prizes" class="block text-sm font-medium text-gray-700">Новые призовые</label>
+                <textarea id="prizes" class="mt-1 block w-full p-2 border rounded-md" placeholder="Введите призовые"></textarea>
+                <button onclick="submitAction('set_prizes', 'prizes')" class="mt-2 w-full bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700">Обновить призовые</button>
+            </div>
+            <!-- View User -->
+            <div>
+                <label for="view_user" class="block text-sm font-medium text-gray-700">ID пользователя</label>
+                <input type="text" id="view_user" class="mt-1 block w-full p-2 border rounded-md" placeholder="Введите ID">
+                <button onclick="submitAction('view_user', 'view_user')" class="mt-2 w-full bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700">Посмотреть профиль</button>
+            </div>
+            <!-- Broadcast -->
+            <div>
+                <label for="broadcast" class="block text-sm font-medium text-gray-700">Текст рассылки</label>
+                <textarea id="broadcast" class="mt-1 block w-full p-2 border rounded-md" placeholder="Введите текст рассылки"></textarea>
+                <button onclick="submitAction('broadcast', 'broadcast')" class="mt-2 w-full bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700">Отправить рассылку</button>
+            </div>
+            <!-- Grant Admin -->
+            <div>
+                <label for="grant_admin" class="block text-sm font-medium text-gray-700">Выдать админа (@username)</label>
+                <input type="text" id="grant_admin" class="mt-1 block w-full p-2 border rounded-md" placeholder="Введите @username">
+                <button onclick="submitAction('grant_admin', 'grant_admin')" class="mt-2 w-full bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700">Выдать админа</button>
+            </div>
+            <!-- Revoke Admin -->
+            <div>
+                <label for="revoke_admin" class="block text-sm font-medium text-gray-700">Забрать админа (@username)</label>
+                <input type="text" id="revoke_admin" class="mt-1 block w-full p-2 border rounded-md" placeholder="Введите @username">
+                <button onclick="submitAction('revoke_admin', 'revoke_admin')" class="mt-2 w-full bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700">Забрать админа</button>
+            </div>
+            <!-- Notify -->
+            <div>
+                <label for="notify" class="block text-sm font-medium text-gray-700">Уведомление (ID текст)</label>
+                <textarea id="notify" class="mt-1 block w-full p-2 border rounded-md" placeholder="Введите ID и текст (например, 123456 Сообщение)"></textarea>
+                <button onclick="submitAction('notify', 'notify')" class="mt-2 w-full bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700">Отправить уведомление</button>
+            </div>
+            <!-- Block User -->
+            <div>
+                <label for="block_user" class="block text-sm font-medium text-gray-700">ID пользователя для блокировки</label>
+                <input type="text" id="block_user" class="mt-1 block w-full p-2 border rounded-md" placeholder="Введите ID">
+                <button onclick="submitAction('block_user', 'block_user')" class="mt-2 w-full bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700">Заблокировать</button>
+            </div>
+        </div>
+        <button onclick="Telegram.WebApp.close()" class="mt-6 w-full bg-gray-600 text-white p-2 rounded-md hover:bg-gray-700">Закрыть</button>
+    </div>
 
-        <label>Правила:</label><br>
-        <textarea name="rules" rows="4">{{ config.rules }}</textarea><br><br>
+    <script>
+        function submitAction(action, inputId) {
+            const value = document.getElementById(inputId).value;
+            if (!value) {
+                alert('Пожалуйста, заполните поле!');
+                return;
+            }
+            Telegram.WebApp.sendData(JSON.stringify({ action, value }));
+            document.getElementById(inputId).value = ''; // Clear input
+        }
 
-        <label>Код:</label><br>
-        <input type="text" name="code" value="{{ config.code }}"><br><br>
-
-        <button type="submit">Сохранить</button>
-    </form>
+        // Initialize Telegram Web App
+        Telegram.WebApp.ready();
+        Telegram.WebApp.expand();
+    </script>
 </body>
 </html>
