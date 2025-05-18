@@ -1,11 +1,75 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <title>Авторизация Twitch</title>
+  <meta charset="UTF-8">
+  <title>Авторизация Twitch</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Segoe UI', sans-serif;
+      color: white;
+      text-align: center;
+      background: black;
+      overflow: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: url('https://media.tenor.com/NqKNFHS4G9wAAAAC/neon-pixels.gif') center center / cover no-repeat;
+      opacity: 0.2;
+      z-index: -1;
+    }
+
+    .container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 30px;
+      text-shadow: 0 0 10px #00ffcc;
+    }
+
+    .btn {
+      font-size: 1.2rem;
+      padding: 15px 30px;
+      border: none;
+      background-color: #9147ff;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 0 15px #9147ff;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      background-color: #772ce8;
+      box-shadow: 0 0 20px #772ce8;
+    }
+
+    .footer {
+      position: absolute;
+      bottom: 20px;
+      width: 100%;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #ccc;
+    }
+  </style>
 </head>
 <body>
+  <div class="container">
     <h1>Войти через Twitch</h1>
-    <a href="/authorize"><button>Авторизовать бота</button></a>
+    <a href="/authorize"><button class="btn">Авторизовать бота</button></a>
+  </div>
+  <div class="footer">Created bot by horiifn</div>
 </body>
 </html>
