@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAPTBOT Команды и Фильтры</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Orbitron', sans-serif;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff;
+            overflow: hidden;
+            background: #000000;
+            position: relative;
+        }
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            z-index: 2;
+        }
+        .bot-name {
+            font-size: 1.5rem;
+            color: #ffffff;
+            text-shadow: 0 0 10px #cccccc;
+        }
+        .auth-button {
+            background: linear-gradient(45deg, #cccccc, #ffffff);
+            color: #000000;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 15px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 0 10px #ffffff;
+        }
+        .auth-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px #ffffff, 0 0 30px #cccccc;
+        }
+        .container {
+            text-align: left;
+            padding: 2rem;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.85);
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+            max-width: 800px;
+            width: 90%;
+            z-index: 2;
+            animation: fadeIn 1.5s ease-out;
+            flex: 1;
+            overflow-y: auto;
+        }
+        h1 {
+            font-size: 2rem;
+            color: #ffffff;
+            text-shadow: 0 0 15px #cccccc, 0 0 30px #cccccc;
+            animation: glow 2s ease-in-out infinite alternate;
+            margin-bottom: 1rem;
+        }
+        h2 {
+            font-size: 1.5rem;
+            color: #dddddd;
+            margin: 1.5rem 0 1rem;
+            border-bottom: 1px solid #555555;
+            padding-bottom: 0.5rem;
+        }
+        p, ul {
+            font-size: 1rem;
+            color: #dddddd;
+            margin: 0.5rem 0;
+            line-height: 1.5;
+        }
+        ul {
+            padding-left: 1.5rem;
+        }
+        li {
+            margin-bottom: 0.5rem;
+        }
+        .example {
+            font-style: italic;
+            color: #999999;
+        }
+        .notes {
+            font-size: 0.9rem;
+            color: #999999;
+            margin-top: 1rem;
+        }
+        .created-by {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #999999;
+            padding: 1rem;
+            z-index: 2;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes glow {
+            from { text-shadow: 0 0 10px #ffffff, 0 0 20px #ffffff; }
+            to { text-shadow: 0 0 20px #cccccc, 0 0 40px #cccccc; }
+        }
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+            h2 {
+                font-size: 1.2rem;
+            }
+            p, ul {
+                font-size: 0.9rem;
+            }
+            .bot-name {
+                font-size: 1.2rem;
+            }
+            .auth-button {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <canvas id="space-bg"></canvas>
+    <div class="header">
+        <div class="bot-name">MAPTBOT</div>
+        <a href="http://localhost:3000/" class="auth-button">Авторизация</a>
+    </div>
+    <div class="container">
+        <h1>MAPTBOT Команды и Фильтры</h1>
+
+        <h2>Категория COMMANDS</h2>
+        <h3>1. Команда !погода</h3>
+        <p>Укажите ваш город для просмотра погоды.</p>
+        <p class="example">Пример: !погода Москва</p>
+        <p class="example">Пример ответа: 🌤 Погода в Москва: Переменная облачность, 🌡 6°C (ощущается как 3°C), 💧 Влажность 87%, 💨 Ветер 14 км/ч</p>
+
+        <h3>2. AI Интеллект</h3>
+        <p>Напишите в чат @maptbot и ваш вопрос, бот ответит на него!</p>
+
+        <h2>Категория FILTRS</h2>
+        <h3>CAPS-фильтр</h3>
+        <p>Вкл/Откл: !anticp [ on | off ]</p>
+        <p>Действия CAPS-фильтра:</p>
+        <ul>
+            <li>User напишет сообщение вроде HELLO WORLD (минимум 5 символов, 70%+ заглавных).</li>
+            <li>Бот ответит: @username не пиши капсом предупреждение 1/3.</li>
+            <li>После третьего предупреждения: @username Отстранен на 60 секунд за CAPS.</li>
+            <li>Работает для всех, включая VIP.</li>
+        </ul>
+
+        <h3>SPAM-фильтр</h3>
+        <p>Вкл/Откл: !antisp [ on | off ]</p>
+        <p>Действия SPAM-фильтра:</p>
+        <ul>
+            <li>User отправит 3 или 4 одинаковых сообщения подряд (например, hi).</li>
+            <li>Бот мутит на 60 секунд: @username Отстранен на 60 секунд за SPAM.</li>
+            <li>Не срабатывает для VIP-пользователей.</li>
+        </ul>
+
+        <div class="notes">
+            <p><strong>Примечания:</strong></p>
+            <p><strong>CAPS-фильтр:</strong></p>
+            <ul>
+                <li>Срабатывает, если 70%+ букв в сообщении заглавные и длина ≥ 5 символов (игнорирует пробелы, цифры, символы).</li>
+                <li>Счётчик предупреждений сбрасывается после мута.</li>
+            </ul>
+            <p><strong>SPAM-фильтр:</strong></p>
+            <ul>
+                <li>Хранит до 4 последних сообщений для каждого пользователя.</li>
+                <li>Сравнивает последние 3 сообщения на идентичность.</li>
+                <li>История сообщений сбрасывается после мута.</li>
+            </ul>
+        </div>
+    </div>
+    <div class="created-by">Created by horiifn</div>
+    <script>
+        const canvas = document.getElementById('space-bg');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const stars = [];
+        const numStars = 500;
+
+        class Star {
+            constructor() {
+                this.x = (Math.random() - 0.5) * canvas.width * 2;
+                this.y = (Math.random() - 0.5) * canvas.height * 2;
+                this.z = Math.random() * canvas.width * 2;
+                this.size = Math.random() * 1.5 + 0.5;
+                this.speed = Math.random() * 0.6 + 0.2;
+            }
+            update() {
+                this.z -= this.speed;
+                if (this.z <= 0) {
+                    this.z = canvas.width * 2;
+                    this.x = (Math.random() - 0.5) * canvas.width * 2;
+                    this.y = (Math.random() - 0.5) * canvas.height * 2;
+                }
+            }
+            draw() {
+                const sx = (this.x * canvas.width) / (this.z + canvas.width) + canvas.width / 2;
+                const sy = (this.y * canvas.height) / (this.z + canvas.height) + canvas.height / 2;
+                const size = this.size * (canvas.width / (this.z + canvas.width));
+                if (sx >= -size && sx <= canvas.width + size && sy >= -size && sy <= canvas.height + size) {
+                    ctx.beginPath();
+                    ctx.arc(sx, sy, size, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(255, 255, 255, ${1 - this.z / (canvas.width * 2)})`;
+                    ctx.fill();
+                }
+            }
+        }
+
+        for (let i = 0; i < numStars; i++) {
+            stars.push(new Star());
+        }
+
+        function animate() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            stars.forEach(star => {
+                star.update();
+                star.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        animate();
+    </script>
+</body>
+</html>
